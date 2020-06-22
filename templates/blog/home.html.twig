@@ -1,0 +1,30 @@
+{#Je dois indiquer de quel gabarit de base mon template doit hériter #} 
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1>{{ title }} </h1> 
+{# On interpole la variable title déclarée et initialisée 
+dans le controller #}
+
+{# TWIG est un langage de rendu #}
+{# L'absence de PHP dans le template rend les choses plus 
+simples pour un intégrateur
+#}
+{% if age >18 %} 
+
+    <p>Vous êtes majeur</p>
+
+{% else %}
+
+    <p>vous êtes mineur</p>
+
+{% endif %} 
+
+<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quia ab natus totam libero explicabo repudiandae. Sapiente, deserunt iusto maiores possimus temporibus iure iste soluta quidem sed quos perspiciatis explicabo cupiditate.Nihil esse ratione voluptates, at, voluptate facere, dignissimos maiores porro suscipit molestias maxime eum repudiandae deleniti doloribus odit ipsa quam. Nulla natus, voluptates sunt ad excepturi reprehenderit aspernatur libero dicta.</p>
+
+<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. A perspiciatis id magni eum mollitia maxime voluptatibus, modi impedit et ratione, animi eaque illum officiis tempore ducimus? Incidunt ad voluptatum accusamus.</p>
+
+{% endblock %}
+
+
