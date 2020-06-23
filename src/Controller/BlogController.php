@@ -47,6 +47,16 @@ class BlogController extends AbstractController
         ]);
         // On va ensuite créer le fichier home.html.twig dans templates
     }
+    
+    // show(): méthode permettant de voir le détail des articles
+
+    /**
+     * @Route("/blog/12", name="blog_show")
+     */
+    public function show()
+    {
+        return $this->render('blog/show.html.twig');
+    }
 
 }
 
