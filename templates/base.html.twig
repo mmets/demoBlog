@@ -12,7 +12,7 @@
         {% endblock %}
     </head>
     <body>
-        <!-- Gabarit de base -->
+        {# Gabarit de base #}
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Blog Symfony</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,10 +22,12 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{path('home')}}">Home <span class="sr-only">(current)</span></a>
+                {# path() : c'est une fonction TWIG qui permet de générer une URL 
+                à partir du nom de la route envoyée en argument #}
                 </li>
                 <li class="nav-item active">
-                <a class="nav-link" href="#">Articles</a>
+                <a class="nav-link" href="{{path('blog')}}">Articles</a>
                 </li>
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -52,7 +54,7 @@
         <section class="container mon-conteneur">
 
         {% block body %}
-        <!-- Contient tous les templates  -->
+        {# Contient tous les templates  #}
 
         {% endblock %}
         </section>
