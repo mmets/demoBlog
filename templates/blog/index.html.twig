@@ -3,35 +3,27 @@
 {% block title %}Hello BlogController!{% endblock %}
 
 {% block body %}
-    <h1 class="display-4 text-center my-4"> Liste Articles</h1>
-
+    <h1 class="display-4 text-center my-4"> Liste Articles</h1>        
+    
     <div class="row d-flex justify-content-around">
-        <div class="card mb-2 text-center" style="width: 18rem;">
-            <img src="https://picsum.photos/seed/picsum/200/300" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="{{path('blog_show')}}" class="btn btn-primary">Go somewhere</a>
-            </div>
 
-        </div>
-        <div class="card mb-2 text-center" style="width: 18rem;">
-            <img src="https://picsum.photos/seed/picsum/200/300" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="{{path('blog_show')}}" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="card mb-2 text-center" style="width: 18rem;">
-            <img src="https://picsum.photos/seed/picsum/200/300" class="card-img-top" alt="...">
-            <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="{{path('blog_show')}}" class="btn btn-primary">Go somewhere</a>
-            </div>
+        {% for data in articles %}
 
-        </div>
+            {# data est une variable de réception des données d'article issues du controller à chaque tour de boucle#}
+
+            <div class="card mb-2 text-center" style="width: 18rem;">
+                <img src="{{ data.image }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">{{ data.title }}</h5>
+                <p class="card-text">{{ data.text }}</p>
+                <p class="card-text">{{ data.content|raw }}</p>
+                <p class="card-text">Posté le {{ data.createdAt|date('d-m-Y à H:i:s') }}</p>
+                <a href="{{ path('blog_show', {'id':data.id}) }}" class="btn btn-primary">Voir plus...</a>
+                {# La route blog_show attend un id en url pour pouvoir pointer vers l'article correspondant
+                On insère donc {'id':data.id} #}
+                </div>
+            </div>
+        {% endfor %}
     </div>
     
 {% endblock %}

@@ -2,15 +2,21 @@
 
 {% block body %}
 
+{# L'id étant unique, en sélectionnant l'article correspondant, on va retrouver
+toutes les informations de l'article en question.
+On pourra ainsi avoir accès à toutes ses propriétés en utilisant la 
+dot notation #}
     <h1 class="display-4 text-center my-4">Détails Article</h1>
-
     <div class="col-md-12 card mb-2 p-0" >
-        <img src="https://picsum.photos/seed/picsum/300/100" class="card-img-top" alt="...">
+        {# le filtre TWIG replace({"largeuràchanger": "nouvellesvaleurs"}) permet de 
+        remplacer la largeur de l'image par de nouvelles valeurs  #}
+        <img src="{{ article.image|replace({"200": "1000/300"}) }}" class="card-img-top" alt="...">
         <div class="card-body">
-        <h5 class="card-title text-center ">Card title</h5>
-        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor sed beatae officia explicabo praesentium voluptate cum tempora delectus possimus hic tempore, totam fuga voluptates rem quae, soluta magnam, dolorum vel!</p>
-        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor sed beatae officia explicabo praesentium voluptate cum tempora delectus possimus hic tempore, totam fuga voluptates rem quae, soluta magnam, dolorum vel!</p>
-        <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolor sed beatae officia explicabo praesentium voluptate cum tempora delectus possimus hic tempore, totam fuga voluptates rem quae, soluta magnam, dolorum vel!</p>
+            <h5 class="card-title text-center ">{{article.title}}</h5>
+            <p class="card-text">{{article.content|raw}}</p>
+            <p class="card-text">{{article.content|raw}}</p>
+            <p class="card-text">{{article.content|raw}}</p>
         </div>
-    </div>
+    </div> 
+
 {% endblock %}
