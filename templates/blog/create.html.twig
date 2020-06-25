@@ -1,24 +1,44 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-    <h1 class="display-4 my-4 text-center">Créer un nouvel article</h1>
 
-        <form class="row col-md-6 mx-auto" action="" method="post">
+    <h1 class="display-4 my-4 text-center">Créer un nouvel article</h1>
+    
+    {# Il existe des outils de Symfony permettant de générer un formulaire 
+       form_start , une fonction de TWIG permet de commencer (ouvrir) le 
+       formulaire. Par défaut, method='post'    
+    #}
+    
+    {{ form_start(form_article, {'attr':{'class':'col-md-6 mx-auto'}}) }}
+                
+        {{ form_row(form_article.title, {'attr':{'placeholder':'Entrer titre article'}} ) }}
+        {{ form_row(form_article.content, {'attr':{'placeholder':'Entrer contenu', 'rows': 15, 'cols': 20}}) }}
+        {{ form_row(form_article.image, {'attr': {'placeholder':'Choisir image'}}) }}
+
+        <button type="submit" class="btn btn-info">Enregistrer</button>
+        {# Parce qu'on va utiliser un bouton pour enregistrer et un autre pour modifier
+        le formulaire, on code directement <button></button>#}
+    {{ form_end(form_article) }} 
+    {# form_end ferme le formulaire #}
+    
+    {#    <form class=" col-md-6 mx-auto" action="" method="post">
             <div class="form-group">
                 <label for="title"> Titre : </label>
                 <input class="form-control" type="text" name="title" id="title">
             </div>
             <div class="form-group">
-                <label for="text"> Résumé : </label>
-                <input type="text" name="text" id="text">
-            </div>
-            <div class="form-group">
                 <label for="content"> Contenu : </label>
-                <textarea name="content" id="content" cols="30" rows="10">
-                    Votre content ici
+                <textarea class="form-control" name="content" id="content" cols="30" rows="10">
                 </textarea>
             </div>
-            <button type="submit" class="btn btn-light">Enregistrer</button>
+            <div class="form-group">
+                <label for="image"> Image : </label>
+                <input class="form-control" type="text" name="image" id="image">
+            </div>
+            <button type="submit" class="btn btn-dark">Enregistrer</button>
+
         </form>
+        #}
+
 
 {% endblock %}
