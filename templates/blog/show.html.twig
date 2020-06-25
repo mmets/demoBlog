@@ -10,7 +10,7 @@ dot notation #}
     <div class="col-md-12 card mb-2 p-0" >
         {# le filtre TWIG replace({"largeuràchanger": "nouvellesvaleurs"}) permet de 
         remplacer la largeur de l'image par de nouvelles valeurs  #}
-        <img src="{{ article.image|replace({"200": "1000/300"}) }}" class="card-img-top" alt="...">
+        <img src="{{ article.image|replace({"200": "1000/300"}) }}" class="card-img-top" alt="{{article.title}}">
         <div class="card-body">
             <h5 class="card-title text-center ">{{article.title}}</h5>
             <p class="card-text">{{article.content|raw}}</p>

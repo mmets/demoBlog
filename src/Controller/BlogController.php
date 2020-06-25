@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use DateTime;
+use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Article;// Bien vérifier que la classe sur laquelle on fera les manip 
                        // est appellée
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\ArticleRepository;
+
 
 // Toutes les méthodes seront déclarées à l'intérieur de la 
 // classe BlogController extends AbstractController
@@ -78,7 +83,7 @@ class BlogController extends AbstractController
         ]);
     }
 
-    // On crée une nouvelle route qui correspond à une nouvette page
+    // On crée une nouvelle route / qui correspond à une nouvelle page Home
 
     /**
      * @Route("/", name="home")
@@ -94,12 +99,138 @@ class BlogController extends AbstractController
         // On va ensuite créer le fichier home.html.twig dans templates
     }
 
+    // Route pour la page Créer un article
     /**
      * @Route("/blog/new", name="blog_create")
+     * @Route("/blog/{id}/edit", name="blog_edit")
      */
-    public function create()
+    // Lorsqu'on définit une nouvelle route qui contient un id, on doit 
+    // injecter une dépendance Article et initialiser son objet à null pour 
+    // pouvoir récupérer les données de l'article en base et les modifier
+    public function create(Article $article = null, Request $request, EntityManagerInterface $manager)
     {
-        return $this->render('blog/create.html.twig');
+        /*  
+            La classe Request est une classe prédéfinie de Symfony qui récupère 
+            les données du formulaire et les stocke dans les superglobales 
+            ($_POST, $_COOKIE, $_SERVER, ..etc) 
+            On a accès à ces données via l'objet $request qui est une instance 
+            de la classe Request
+
+            EntityManagerInterface est une interface prédéfinie de Symfony 
+            qui permet d'insérer les données en BDD.
+            Elle contient les méthodes permettant de préparer et exécuter 
+            les requêtes SQL (persist() et flush())
+        */
+        //dump($request);//permet d'avoir un ensemble d'infos dont celles entrées 
+                        // dans le formulaire
+
+        /*
+            $request->request est une propriété de $request qui permet d'avoir 
+            accès aux données du formulaire; c'est un $_POST
+        */
+
+        // Avant d'insérer les données dans la BDD, on vérifie que le formulaire n'est pas vide 
+
+        /*if($request->request->count() > 0)
+        {
+            /* On crée un objet article dans lequel les données du formulaire seront 
+                stockées pour être insérées en base
+            */
+            // $article = new Article;
+
+            // $article->setTitle($request->request->get('title'))
+            //         ->setContent($request->request->get('content'))
+            //         ->setImage($request->request->get('image'))
+            //         ->setCreatedAt(new DateTime);
+
+            /*
+                persist() est une méthode issue de EntityManagerInterface permettant
+                de préparer et sticker la requête SQL
+
+                flush() permet quant à elle de libérer et d'exéuter ladite requête
+            */
+            // $manager->persist($article);
+            // $manager->flush();
+
+            // dump($article);
+
+            /*
+                Une fois que l'article est créé, on le redirige vers sa page dédiée.
+                Pour le faire, on utilise la méthode 
+                redirectToRoute('name de la route', ['id'=>$id])
+            */
+
+        //     return $this->redirectToRoute('blog_show', [
+        //             'id' => $article->getId()
+        //     ]);
+
+        // }
+        if(!$article)
+        {
+            $article = new Article;
+        }
+        
+        /*
+            createFormBuilder($article) est une méthode de Symfony qui permet de créer 
+            un formulaire dont les paramètres permettront de remplir l'objet $article
+            
+            add() permet de créer les champs du formulaire
+
+            getForm() permet de valider l'apparence du formulaire
+
+            createView() permet de créer une vue càd un objet qui contient le formulaire 
+            afin de l'envoyer à view(create.html.view). Elle est indispensable pour pouvoir 
+            afficher le formulaire
+        */
+        // test pour remplir le formulaire
+        // $article->setTitle("Titre random")
+        //         ->setContent('Random content'); 
+
+        $id = $article->setId();
+        return $this->redirectToRoute('blog_edit');
+
+        $form = $this->createFormBuilder($article)
+
+                    ->add('title')
+                    //  ->add('title', TextType::class, [
+                    //      'attr' => [
+                    //          'placeholder' => "Titre de votre article",
+                    //          'class' => "form-control"
+                    //      ]
+                    //  ])
+
+                     /* On peut préciser les paramètres de 'title' en rajoutant une classe 
+                     TextType
+                     */
+                     ->add('content')
+                     ->add('image')
+
+                    //  ->add('submit', SubmitType::class)
+
+                     ->getForm();
+
+        // handleRequest() permet de set toutes les données récupérées dans 
+        // le formulaire
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $article->setCreatedAt(new \DateTime);
+
+            $manager->persist($article);
+            $manager->flush();
+
+            dump($article);
+
+            return $this->redirectToRoute('blog_show', [
+                            'id' => $article->getId()
+            ]);
+        }
+
+        return $this->render('blog/create.html.twig', [
+            'form_article' => $form->createView()
+        ]);
+       
     }
     
     // show(): méthode permettant de voir le détail des articles
@@ -141,7 +272,7 @@ class BlogController extends AbstractController
         dump($article);
 
         return $this->render('blog/show.html.twig', 
-           [ 'article' => $article
+           [ 'article' => $article 
            ]);
     }
 

@@ -9,7 +9,8 @@
 
         {% for data in articles %}
 
-            {# data est une variable de réception des données d'article issues du controller à chaque tour de boucle#}
+            {# data est une variable de réception des données d'article issues du controller. 
+            Elle réceptionne les donnnées de l'article à chaque tour de boucle#}
 
             <div class="card mb-2 text-center" style="width: 18rem;">
                 <img src="{{ data.image }}" class="card-img-top" alt="...">
@@ -17,9 +18,13 @@
                 <h5 class="card-title">{{ data.title }}</h5>
                 <p class="card-text">{{ data.text }}</p>
                 <p class="card-text">{{ data.content|raw }}</p>
+                {# Le filtre |raw permet d'échapper les balises HTML #}
                 <p class="card-text">Posté le {{ data.createdAt|date('d-m-Y à H:i:s') }}</p>
+                {# date.createdAt retourne un objet DateTime. Pour pouvoir l'afficher on a besoin d'un filtre
+                Les filtres sont appliqués avec | suivi du nom du filtre #}
                 <a href="{{ path('blog_show', {'id':data.id}) }}" class="btn btn-primary">Voir plus...</a>
-                {# La route blog_show attend un id en url pour pouvoir pointer vers l'article correspondant
+                {# Pour pouvoir afficher les détails de l'article grâce à la méthode show(), la route 
+                blog_show attend un id en url pour pouvoir pointer vers l'article correspondant
                 On insère donc {'id':data.id} #}
                 </div>
             </div>
