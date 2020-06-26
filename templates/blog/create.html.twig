@@ -2,8 +2,26 @@
 
 {% block body %}
 
-    <h1 class="display-4 my-4 text-center">Créer un nouvel article</h1>
+    {# editMode est une variable TWIG provenant de 'BlogController' de 
+        la méthode 'form()'. Elle permet de savoir si l'article possède un ID 
+        ou non. 
+        On peut ainsi gérer l'affichage en fonction de l'action (ajout ou modification)
+    #}
     
+    {# Si la condition IF renvoie TRUE, ça veut dire que l'article possède un ID, 
+        alors c'est une modification 
+        Si non, dans tous les autres cas, l'article n'a pas d'ID et nous sommes dans 
+        le cas d'une insertion 
+    #}
+    <h1 class="display-4 my-4 text-center">
+        {% if editMode %}
+            Modifier article
+        {% else %}        
+            Créer un nouvel article
+        {% endif %}
+    </h1>
+    
+
     {# Il existe des outils de Symfony permettant de générer un formulaire 
        form_start , une fonction de TWIG permet de commencer (ouvrir) le 
        formulaire. Par défaut, method='post'    
@@ -14,8 +32,15 @@
         {{ form_row(form_article.title, {'attr':{'placeholder':'Entrer titre article'}} ) }}
         {{ form_row(form_article.content, {'attr':{'placeholder':'Entrer contenu', 'rows': 15, 'cols': 20}}) }}
         {{ form_row(form_article.image, {'attr': {'placeholder':'Choisir image'}}) }}
-
-        <button type="submit" class="btn btn-info">Enregistrer</button>
+  
+        <button type="submit" class="btn btn-info">
+            {% if editMode %}
+                Enregistrer modifications
+            {% else %}
+                Ajouter article
+            {% endif %}
+            </button>
+            
         {# Parce qu'on va utiliser un bouton pour enregistrer et un autre pour modifier
         le formulaire, on code directement <button></button>#}
     {{ form_end(form_article) }} 
