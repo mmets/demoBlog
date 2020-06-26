@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use DateTime;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,7 +108,7 @@ class BlogController extends AbstractController
     // Lorsqu'on définit une nouvelle route qui contient un id, on doit 
     // injecter une dépendance Article et initialiser son objet à null pour 
     // pouvoir récupérer les données de l'article en base et les modifier
-    public function create(Article $article = null, Request $request, EntityManagerInterface $manager)
+    public function form(Article $article = null, Request $request, EntityManagerInterface $manager)
     {
         /*  
             La classe Request est une classe prédéfinie de Symfony qui récupère 
@@ -165,10 +166,7 @@ class BlogController extends AbstractController
         //     ]);
 
         // }
-        if(!$article)
-        {
-            $article = new Article;
-        }
+
         
         /*
             createFormBuilder($article) est une méthode de Symfony qui permet de créer 
@@ -185,13 +183,11 @@ class BlogController extends AbstractController
         // test pour remplir le formulaire
         // $article->setTitle("Titre random")
         //         ->setContent('Random content'); 
+        
 
-        $id = $article->setId();
-        return $this->redirectToRoute('blog_edit');
+        /* $form = $this->createFormBuilder($article)
 
-        $form = $this->createFormBuilder($article)
-
-                    ->add('title')
+                   // ->add('title')
                     //  ->add('title', TextType::class, [
                     //      'attr' => [
                     //          'placeholder' => "Titre de votre article",
@@ -199,23 +195,66 @@ class BlogController extends AbstractController
                     //      ]
                     //  ])
 
-                     /* On peut préciser les paramètres de 'title' en rajoutant une classe 
+                    On peut préciser les paramètres de 'title' en rajoutant une classe 
                      TextType
-                     */
-                     ->add('content')
-                     ->add('image')
+                     
+                     //->add('content')
+                    // ->add('image')
 
                     //  ->add('submit', SubmitType::class)
 
-                     ->getForm();
+                    //->getForm();
+        */
 
-        // handleRequest() permet de set toutes les données récupérées dans 
-        // le formulaire
+        /*
+            Si l'article n'existe pas (n'a pas encore été crée); $article == null, 
+            aucun ID n'est existant en base et n'est transmis à l'URL. Nous sommes donc 
+            dans le cas d'une insertion. 
+            Il faut alors instancier un objet pour stocker les données issues du formulaire
+            On entre dans la condition uniquement lorsqu'on insère un nouvel article
+        */
+        if(!$article)
+        {
+            $article = new Article;
+        }    
+        
+        /* 
+            Autre manière de créer un formulaire    
+            Il est possible de créer un formulaire à partir d'une entité article 
+            en utilisant php bin/console make:form
+
+        */
+
+        $form = $this->createForm(ArticleType::class, $article);
+        /* createForm() : méthode Symfony qui permet de créer un formulaire. 
+            On importe la classe ArticleType qui permet de créer le formulaire
+    
+         Elle attend en argument la classe du formulaire et l'objet 
+         de l'entité Article qui va réceptionner les données du formulaire
+        */
+        /* handleRequest() permet de récupérer toutes les valeurs du formulaire 
+        contenues dans $request ($_POST) afin de les envoyer directement dans les 
+        setter de l'objet $article
+        */ 
         $form->handleRequest($request);
         
+        // Si le formulaire a bien été soumis (qu'on a cliqué sur 'submit et tout est bien validé), 
+        // càd que chaque valeur du formulaire a bien été transmise au bon setter, alors on rentre
+        // dans la condition
+
+        /* 
+            Sécuriser le formulaire
+        */
         if($form->isSubmitted() && $form->isValid())
         {
-            $article->setCreatedAt(new \DateTime);
+            /* Pour conserver la date d'origine de création de l'article en cas de modification, 
+                on contrôle l'existence de l'id de l'article 
+                S'il est inexistant, on rentre bien dans la condition et une nouvelle date est créée 
+            */
+            if(!$article->getId())
+            {
+                $article->setCreatedAt(new \DateTime);
+            }
 
             $manager->persist($article);
             $manager->flush();
@@ -228,7 +267,8 @@ class BlogController extends AbstractController
         }
 
         return $this->render('blog/create.html.twig', [
-            'form_article' => $form->createView()
+            'form_article' => $form->createView(),
+            'editMode' => $article->getId() !== null
         ]);
        
     }
