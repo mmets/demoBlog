@@ -312,7 +312,7 @@ class BlogController extends AbstractController
         dump($article);
 
         return $this->render('blog/show.html.twig', 
-           [ 'article' => $article 
+           [ 'article' => $article ,
            ]);
     }
 

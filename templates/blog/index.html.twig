@@ -15,17 +15,19 @@
             <div class="card mb-2 text-center" style="width: 18rem;">
                 <img src="{{ data.image }}" class="card-img-top" alt="...">
                 <div class="card-body">
-                <h5 class="card-title">{{ data.title }}</h5>
-                <p class="card-text">{{ data.text }}</p>
-                <p class="card-text">{{ data.content|raw }}</p>
-                {# Le filtre |raw permet d'échapper les balises HTML #}
-                <p class="card-text">Posté le {{ data.createdAt|date('d-m-Y à H:i:s') }}</p>
-                {# date.createdAt retourne un objet DateTime. Pour pouvoir l'afficher on a besoin d'un filtre
-                Les filtres sont appliqués avec | suivi du nom du filtre #}
-                <a href="{{ path('blog_show', {'id':data.id}) }}" class="btn btn-primary">Voir plus...</a>
-                {# Pour pouvoir afficher les détails de l'article grâce à la méthode show(), la route 
-                blog_show attend un id en url pour pouvoir pointer vers l'article correspondant
-                On insère donc {'id':data.id} #}
+                    <h5 class="card-title">{{ data.title }}</h5>
+                    <p class="card-text">{{ data.text }}</p>
+                    <p class="card-text">{{ data.content|slice(0,100)|raw }}...</p>
+                    {# |slice(debut, fin): filtre TWIG qui permet de tronquer une chaîne de caractères #}
+                    {# Le filtre |raw permet d'échapper les balises HTML #}
+                    
+                    <p class="card-text">Posté le {{ data.createdAt|date('d-m-Y à H:i:s') }} dans la catégorie {{ data.category.titre}} </p>
+                    {# date.createdAt retourne un objet DateTime. Pour pouvoir l'afficher on a besoin d'un filtre
+                    Les filtres sont appliqués avec | suivi du nom du filtre #}
+                    <a href="{{ path('blog_show', {'id':data.id}) }}" class="btn btn-primary">Voir plus...</a>
+                    {# Pour pouvoir afficher les détails de l'article grâce à la méthode show(), la route 
+                    blog_show attend un id en url pour pouvoir pointer vers l'article correspondant
+                    On insère donc {'id':data.id} #}
                 </div>
             </div>
         {% endfor %}
