@@ -11,19 +11,48 @@ dot notation #}
         {# le filtre TWIG replace({"largeuràchanger": "nouvellesvaleurs"}) permet de 
         remplacer la largeur de l'image par de nouvelles valeurs  #}
         <img src="{{ article.image|replace({"200": "1000/300"}) }}" class="card-img-top" alt="{{article.title}}">
+        
         <div class="card-body">
             <h5 class="card-title text-center ">{{article.title}}</h5>
-            <p class="card-text">{{article.content|raw}}</p>
-            <p class="card-text">{{article.content|raw}}</p>
             <p class="card-text">{{article.content|raw}}</p>
             <div class="col-md-12 mx-auto">
                 <span class="col-md-2 text-right font-italic">
                     Posté le {{article.createdAt|date('d-m-Y') }} 
+                    dans la catégorie <strong> {{ article.category.titre}} </strong>
                 </span>
                 <span class="col-md-2"><a href="{{ path('blog_edit', {'id':article.id}) }}" class="btn btn-primary text-left">Modifier</a></span>
             </div>
         </div>
-        
-    </div> 
+    </div>
+
+    {# Grâce aux relations bi-directionnelles, lorsqu'on effectue une 
+    sélection dans une table SQL en BDD, on a accès à toutes les autres 
+    tables de la BDD grâce aux clés étrangères créées dans chaque table
+    
+    Dans notre cas, en affichant les détails de l'article, on a tout de 
+    suite accès aux commentaires de l'article stockés dans la variable 
+    comments.
+    Pour afficher tous les commentaires, on a donc besoin d'itérer dans 
+    l'objet comments 
+    #}
+    <div class="col-md-12">
+
+        <h2 class="text-center mt-5" >Derniers avis...</h2>
+
+        {% for comment in article.comments %}
+
+            <div class="row border rounded mb-2 bg-light text-black">
+                <div class="col-md-2">
+                    <span>{{ comment.author}} </span>
+                    <small class="font-italic">{{ comment.createdAt|date('d-m-Y') }} </small>
+                </div>
+
+                <div class="col-md-10">
+                    <p>{{ comment.content|raw}}</p>
+                </div>
+            </div>   
+        {% endfor %}
+         
+    </div>
 
 {% endblock %}
