@@ -276,7 +276,7 @@ class BlogController extends AbstractController
     // show(): méthode permettant de voir le détail des articles
 
     /**
-     * @Route("/blog/{id}", name="blog_show", requirements={"page"="{id}"})
+     * @Route("/blog/{id}", name="blog_show")
      */
 
     // Pour envoyer un id dans l'url, on indique le paramètre {id}

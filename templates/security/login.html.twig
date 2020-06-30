@@ -1,0 +1,35 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+    {# app est une variable TWIG qui contient toutes les informations 
+       liées à la session en cours. 
+       Les messages utilisateurs sont conservés en session 
+       success est un objet qui peut contenir plusieurs messages 
+        #}
+    {% for message in app.flashes('success') %}
+        <div class="bg-success col-md-6 mt-4 mx-auto text-primary text-center p-2">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <h1 class="display-4 text-center my-4">Se connecter</h1>
+
+    {# path('security_login') permet de préciser à Symfony qu'il doit contrôler les données 
+    du formulaire sur la route 'security_login' indiquée dans >security.yaml #}
+     <form class=" col-md-6 mx-auto" action="{{ path('security_login')
+    }}" method="post">
+            <div class="form-group">
+                <label for="_username"> Email : </label>
+                <input class="form-control" type="text" name="_username" id="_username">
+            </div>
+            <div class="form-group">
+                <label for="_password"> Mot de passe : </label>
+                <input class="form-control" type="password" name="_password" id="_password">
+            </div>
+            <button type="submit" class="btn btn-dark">Connectez-vous</button>
+
+    </form>
+        
+
+{% endblock %}

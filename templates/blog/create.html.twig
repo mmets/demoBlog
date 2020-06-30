@@ -30,6 +30,7 @@
     {{ form_start(form_article, {'attr':{'class':'col-md-6 mx-auto'}}) }}
                 
         {{ form_row(form_article.title, {'attr':{'placeholder':'Entrer titre article'}} ) }}
+        {{ form_row(form_article.category) }}
         {{ form_row(form_article.content, {'attr':{'placeholder':'Entrer contenu', 'rows': 15, 'cols': 20}}) }}
         {{ form_row(form_article.image, {'attr': {'placeholder':'Choisir image'}}) }}
   

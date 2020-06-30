@@ -6,7 +6,19 @@
 
     <h1 class="display-4 text-center my-4">Créer votre compte</h1>
 
-    
+
+    {{ form_start(form, {'attr':{'class':'col-md-6 mx-auto'}}) }}
+                
+        {{ form_row(form.email, {'attr':{'placeholder':'nom@email.com'}} ) }}
+        {{ form_row(form.username,{'label':'Nom d\'utilisateur'} ) }}
+        {{ form_row(form.password, {'attr':{'placeholder':'Entrer mot de passe'}} ) }}
+        {{ form_row(form.confirm_password, {'attr':{'placeholder':'Confirmer mot de passe'}} ) }}
+
+        <button type="submit" class="btn btn-info">
+                Valider votre inscription
+        </button>
+            
+    {{ form_end(form) }} 
 
 {% endblock %}
 
