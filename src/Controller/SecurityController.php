@@ -6,8 +6,10 @@ use App\Entity\User;
 use App\Form\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
@@ -42,6 +44,11 @@ class SecurityController extends AbstractController
 
             $user->setPassword($hash);
 
+            // On attribue le ROLE_USER à chaque nouvel utilisateur inscrit sur le blog
+            // Il pourra créer et modifier des articles mais il n'aura pas accès à la 
+            // partie backOffice
+            $user->setRoles(["ROLE_USER"]);
+
             $manager->persist($user);
             $manager->flush();
 
@@ -61,9 +68,33 @@ class SecurityController extends AbstractController
     /**
      * @Route("/connexion", name="security_login")
      */
-    public function login()
+    public function login(AuthenticationUtils $authenticationUtils) :Response
     {
-        return $this->render("security/login.html.twig");
+        /*
+            On injecte la dépendance AuthenticationUtils.
+            La classe AuthenticationUtils contient des méthodes qui 
+            affichent des messages d'erreur, le dernier username(email) 
+            inscrit dans le formulaire
+
+            $error renvoie le message d'erreur en cas de mauvaise connexion
+            si l'internaute a saisi des indentifants erronés au moment
+            de la connexion
+
+            $lastUsername permet de récupérer le dernier username (email) que 
+            l'internaute a inscrit lors de la connexion
+
+            Après avoir défini les variables $error et $lastUsername, on 
+            les envoie dans la vue(template) grâce à return 
+        */
+
+        $error =$authenticationUtils->getLastAuthenticationError();
+
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render("security/login.html.twig", [
+            'last_username' => $lastUsername,
+            'error' => $error
+        ]);
     }
 
     /**

@@ -13,15 +13,30 @@
         </div>
     {% endfor %}
 
-    <h1 class="display-4 text-center my-4">Se connecter</h1>
+    <h1 class="display-4 text-center my-4">Identifiez vous </h1>}
 
+    {# Affiche le message d'erreur de Symfony s'il y a une erreur 
+        
+    Il est possible de personnaliser le message d'erreur dans le fichier 
+    translations en réaffectant notre nouveau message comme nouvelle 
+    valeur à l'ancien message
+    #}
+    {% if error %}
+    <div class="bg-danger text-white text-center p-3 col-md-4 mx-auto rounded">
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+    </div>
+    {% endif %}
+    
+ 
     {# path('security_login') permet de préciser à Symfony qu'il doit contrôler les données 
     du formulaire sur la route 'security_login' indiquée dans >security.yaml #}
-     <form class=" col-md-6 mx-auto" action="{{ path('security_login')
-    }}" method="post">
+     <form class=" col-md-6 mx-auto" action="{{ path('security_login')}}" method="post">
             <div class="form-group">
                 <label for="_username"> Email : </label>
-                <input class="form-control" type="text" name="_username" id="_username">
+                <input class="form-control" type="text" value="{{last_username}}" name="_username" id="_username">
+                {# Pour garder en mémoire l'email dans le cas  l'utilisateur fait une erreur, 
+                on affecte à l'attribut 'value' la valeur 'last_username'
+                last_username provient d'une classe Symfony importée dans SecurityController #}
             </div>
             <div class="form-group">
                 <label for="_password"> Mot de passe : </label>

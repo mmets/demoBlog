@@ -1,0 +1,22 @@
+{% extends "base.html.twig" %}
+
+{% block title %}BACK OFFICE | MODIFIER ARTICLES {% endblock %}
+
+{% block body %}
+    
+    <h1 class="display-4 text-center my-4">MODIFICATION DES ARTICLES </h1>
+
+    {{ form_start(formEdit, {'attr':{'class':'col-md-6 mx-auto'}}) }}
+                    
+        {{ form_row(formEdit.title, {'attr':{'placeholder':'Entrer titre article'}} ) }}
+        {{ form_row(formEdit.category) }}
+        {{ form_row(formEdit.content, {'attr':{'placeholder':'Entrer contenu', 'rows': 15, 'cols': 20}}) }}
+        {{ form_row(formEdit.image, {'attr': {'placeholder':'Choisir image'}}) }}
+
+        <button type="submit" class="btn btn-info">
+                Enregistrer modifications
+        </button>
+        
+    {{ form_end(formEdit) }}
+
+{% endblock %}
