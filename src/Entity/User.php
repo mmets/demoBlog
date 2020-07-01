@@ -68,7 +68,12 @@ class User implements UserInterface
      *              message = "Vérifier votre mot de passe"
      * )
      */
-    public $confirm_password; 
+    public $confirm_password;
+
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = []; 
     // On ajoute la propriété publique $confirm_password 
     // qui va réceptionner les données du champ pour comparer avec la 
     // propriété privée
@@ -137,7 +142,20 @@ class User implements UserInterface
     // stockées les rôles accordés aux utilisateurs comme dans Wordpress
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        /*
+            Pour que l'utilisateur avec un ROLE_ADMIn ait accès à toutes 
+            les parties du site, on va ajouter son accès dans les rôles 
+            avec $this->roles
+        */
+        // return ['ROLE_USER'];
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
 }

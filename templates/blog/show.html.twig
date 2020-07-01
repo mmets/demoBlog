@@ -20,7 +20,10 @@ dot notation #}
                     Posté le {{article.createdAt|date('d-m-Y') }} 
                     dans la catégorie <strong> {{ article.category.titre}} </strong>
                 </span>
-                <span class="col-md-2"><a href="{{ path('blog_edit', {'id':article.id}) }}" class="btn btn-primary text-left">Modifier</a></span>
+
+                {% if app.user %}
+                    <span class="col-md-2"><a href="{{ path('blog_edit', {'id':article.id}) }}" class="btn btn-primary text-left">Modifier</a></span>
+                {% endif %}
             </div>
         </div>
     </div>

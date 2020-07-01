@@ -46,6 +46,10 @@ security:
             logout:
                 path: security_logout
                 target: blog
+    # On indique à Symfony que l'utilisateur avec un ROLE_ADMIN a les mêmes accès que 
+    # celui avec le ROLE_USER
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -56,5 +60,9 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/login, roles: ROLE_USER }
+
+    # si un utilisateur ROLE_USER essaie de se connecter au BackOffice, 
+    # il est redirigé vers la page blog
+    access_denied_url: /blog

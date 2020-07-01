@@ -1,0 +1,41 @@
+{% extends "base.html.twig" %}
+
+{% block title %}BACK OFFICE | GESTION DES ARTICLES {% endblock %}
+
+{% block body %}
+    
+    <h1 class="display-4 text-center my-4">LISTE DES ARTICLES </h1>
+
+    <table class="table table-bordered text-center">
+
+        <tr>
+            {% for data in colonne %}
+
+                {% if data != 'id' %}
+
+                    <th>{{ data }}</th>
+
+                {% endif %}
+
+            {% endfor %}
+                <th>Catégorie</th>
+                <th>Editer</th>
+                <th>Supprimer</th>
+        </tr>
+
+        {% for data in articles %}
+            <tr>
+                <td>{{ data.title }}</td>
+                <td>{{ data.content|raw }}</td>
+                <td>{{ data.text }}</td>
+                <td><img src="{{ data.image }}" style="width: 150px;" alt="{{ data.title }}"></td>
+                <td>{{ data.createdAt|date("d/m/Y à H:i:s") }}</td>
+                <td>{{ data.category.titre }}</td>
+                <td><a class="btn btn-dark" href="{{ path('admin_edit_article', {'id'= data.id}) }}"><i class="far fa-edit"></i>Modifier</a></td>
+                <td><a class="btn btn-danger" href=""><i class="far fa-trash-alt"></i>Supprimer</a></td>
+            </tr>
+        {% endfor %}     
+
+    </table>
+
+{% endblock %}

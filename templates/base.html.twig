@@ -6,6 +6,7 @@
 
         {% block stylesheets %}
 
+            <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
             <link rel="stylesheet" href="{{asset('css/style.css')}}">
             {# asset() : fonction TWIG qui pointe sur le dossier 'public'#}
@@ -29,9 +30,45 @@
                 <li class="nav-item active">
                 <a class="nav-link" href="{{path('blog')}}">Articles</a>
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{path('blog_create')}}">Créer Article</a>
-                </li>
+
+                {# app.user: variable TWIG liée à $_SESSION qui permet d'afficher les données de l'internaute connecté#}
+                {# Si l'internaute est connecté, app.user renvoie true et l'internaute peut créer un article #}
+                {% if app.user %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{path('blog_create')}}">Créer Article</a>
+                    </li>                
+                {% endif %}
+                
+                {# Si l'internaute n'est pas connecté #}
+                {% if not app.user %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('security_registration')}}">S'inscrire</a>
+                    </li> 
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('security_login')}}">Se connecter</a>
+                    </li> 
+                
+                {% endif %}
+                
+                {# Si l'utilisateur a un ROLE_ADMIN en BDD, alors il a accès au BackOffice 
+                is_granted(): méthode TWIG qui permet de vérifier le rôle en BDD #}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('admin')}}">BACK OFFICE</a>
+                    </li> 
+                {% endif %}
+                
+                
+                {% if app.user %}
+                    <img src="" alt="">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ path('security_logout')}}">Déconnexion</a>
+                    </li> 
+                    <li class="nav-item active">
+                    </li>
+                {% endif %}
+                
+
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Utilisateur
@@ -54,7 +91,7 @@
             </div>
         </nav>
 
-        {{ dump(app.user)}} {# permet d'afficher les données de l'internaute connecté#}
+       {# {{ dump(app.user)}}  #}
 
         <section class="container mon-conteneur">
 
